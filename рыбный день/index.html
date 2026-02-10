@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/images/icon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro&family=Source+Serif+4:opsz@8..60&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FISH DAY - Прейскурант</title>
+</head>
+<body class="home">
+    <!-- Обновленный хедер без логотипа в начальном состоянии -->
+    <header class="header" id="mainHeader">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo scroll-logo">
+                <img src="assets/images/logotip.png" alt="Логотип" width="50" height="50">
+                <span>Рыбныйдень</span>
+            </a>
+            
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#main">Главная</a></li>
+                    <li><a href="#fish">Рыба</a></li>
+                    <li><a href="#snacks">Снеки</a></li>
+                    <li><a href="#delivery">Доставка</a></li>
+                    <li><a href="#contacts">Контакты</a></li>
+                </ul>
+            </nav>
+            
+            <div class="nav-right">
+                <a href="cart.html" class="nav-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <button class="burger-menu" id="burgerMenu">
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay для затемнения фона при открытии меню -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Главный баннер с фоновым слайдером -->
+    <section class="hero" id="main">
+        <!-- Фоновый слайдер -->
+        <div class="hero-slideshow">
+            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80&brightness=1.2');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1574781330858-52c3d81e5d1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80&brightness=1.2');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=2072&q=80&brightness=1.2');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1599150917475-f959d4125b8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80&brightness=1.2');"></div>
+        </div>
+        
+        <!-- Затемнение фона -->
+        <div class="hero-overlay"></div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <!-- Десктопная версия -->
+                <div class="hero-desktop">
+                    <!-- Контейнер 1: FISH DAY -->
+                    <div class="hero-main-title">
+                        <h1 class="hero-title">FISH DAY</h1>
+                        <p class="hero-subtitle">качество проверенное временем</p>
+                    </div>
+                    
+                    <!-- Контейнер 2: 4 строки с рамками -->
+                    <div class="hero-features-list">
+                        <div class="feature-item">
+                            <span class="feature-text">Черноморская, Донская, Астраханская рыба</span>
+                            <span class="feature-sticker">✓</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-text">ГОСТ Производство</span>
+                            <span class="feature-sticker">⚙</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-text">Зарубежные снеки</span>
+                            <span class="feature-sticker">✈</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-text">Идеальные закуски к столу</span>
+                            <span class="feature-sticker">🍽</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Мобильная версия -->
+                <div class="hero-mobile">
+                    <!-- Контейнер: FISH DAY с подзаголовком -->
+                    <div class="mobile-main-title">
+                        <h1 class="mobile-fish-day">FISH DAY</h1>
+                        <p class="mobile-subtitle">качество проверенное временем</p>
+                    </div>
+                    
+                    <!-- Контейнер: 4 строки -->
+                    <div class="mobile-features">
+                        <div class="mobile-feature-item">
+                            <div class="mobile-feature-content">
+                                <span class="mobile-feature-text">Черноморская, Донская, Астраханская рыба</span>
+                                <span class="mobile-feature-icon">✓</span>
+                            </div>
+                        </div>
+                        <div class="mobile-feature-item">
+                            <div class="mobile-feature-content">
+                                <span class="mobile-feature-text">ГОСТ Производство</span>
+                                <span class="mobile-feature-icon">⚙</span>
+                            </div>
+                        </div>
+                        <div class="mobile-feature-item">
+                            <div class="mobile-feature-content">
+                                <span class="mobile-feature-text">Зарубежные снеки</span>
+                                <span class="mobile-feature-icon">✈</span>
+                            </div>
+                        </div>
+                        <div class="mobile-feature-item">
+                            <div class="mobile-feature-content">
+                                <span class="mobile-feature-text">Идеальные закуски к столу</span>
+                                <span class="mobile-feature-icon">🍽</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-scroll">
+                    <a href="#fish" class="scroll-down">
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Остальные секции остаются без изменений -->
+    <!-- Секция с рыбой -->
+    <section class="products-section" id="fish">
+        <div class="container">
+            <h2 class="section-title">Рыба вяленая</h2>
+            <div class="products-grid">
+                <!-- Карточки товаров будут сгенерированы через JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Секция с снеками -->
+    <section class="products-section bg-alt" id="snacks">
+        <div class="container">
+            <h2 class="section-title">Снеки</h2>
+            <div class="products-grid snacks-grid">
+                <!-- Карточки снеков будут сгенерированы через JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Доставка -->
+    <section class="delivery-section" id="delivery">
+        <div class="container">
+            <h2 class="section-title">Доставка по всей России</h2>
+            <div class="delivery-logos">
+                <img src="assets/images/cdek.png" alt="СДЭК">
+                <img src="assets/images/russia_pochta.png" alt="Почта России">
+                <img src="assets/images/boxberry.png" alt="Boxberry">
+                <img src="assets/images/wildberries.png" alt="Wildberries">
+                <img src="assets/images/ozon.png" alt="Ozon">
+            </div>
+        </div>
+    </section>
+
+    <!-- Как мы работаем -->
+    <section class="how-we-work">
+        <div class="container">
+            <h2 class="section-title">Как мы работаем</h2>
+            <p class="section-subtitle">4 простых шага к покупке продукции в нашем прейскуранте...</p>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-cart-plus"></i>
+                    </div>
+                    <h3>Добавьте товар в корзину</h3>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Укажите вес/количество</h3>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Заполните контактные данные</h3>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Получите звонок от менеджера</h3>
+                </div>
+            </div>
+            
+            <div class="trust-banner">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Безопасность и конфиденциальность</h3>
+                <p>Мы гарантируем безопасность ваших данных. Менеджер свяжется с вами для уточнения деталей заказа, доставки и оплаты.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <footer class="footer" id="contacts">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="assets/images/logotip.png" alt="Логотип" width="100" height="80">
+                    <h3>FISH DAY</h3>
+                    <p>качество проверенное временем</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p><i class="fas fa-phone"></i> +7 (910) 650-36-02</p>
+                    <p><i class="fas fa-map-marker-alt"></i> п. Строитель, мкр. Северный 49</p>
+                    <p><i class="fas fa-clock"></i> Пн - Пт с 8:00 до 14:00</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Быстрые ссылки</h4>
+                    <ul>
+                        <li><a href="#fish">Рыба</a></li>
+                        <li><a href="#snacks">Снеки</a></li>
+                        <li><a href="#delivery">Доставка</a></li>
+                        <li><a href="cart.html">Корзина</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© Интернет-прейскурант "FISH DAY" | Все права защищены</p>
+                <div class="payment-methods">
+                    <img src="assets/images/tink.png" alt="Тинькофф">
+                    <img src="assets/images/visa.png" alt="Visa">
+                    <img src="assets/images/alfa.png" alt="Альфа-Банк">
+                    <img src="assets/images/мир.png" alt="Мир">
+                    <img src="assets/images/master.png" alt="Mastercard">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Кнопки быстрого действия -->
+    <div class="quick-actions">
+        <a href="cart.html" class="quick-action cart-float">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-float-count" id="cartFloatCount">0</span>
+        </a>
+        <a href="tel:+79106503602" class="quick-action phone-float">
+            <i class="fas fa-phone"></i>
+        </a>
+        <button class="quick-action scroll-top" id="scrollTop">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/products.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('mainHeader');
+            const scrollLogo = document.querySelector('.scroll-logo');
+            const slides = document.querySelectorAll('.hero-slide');
+            
+            // 1. Функция для обновления хедера с анимацией логотипа
+            function updateHeader() {
+                const isHomePage = document.body.classList.contains('home');
+                const scrollPosition = window.scrollY;
+                
+                if (isHomePage) {
+                    if (scrollPosition > 50) {
+                        header.classList.add('scrolled');
+                        // Показываем логотип плавно
+                        if (scrollLogo) {
+                            scrollLogo.style.opacity = '1';
+                            scrollLogo.style.visibility = 'visible';
+                            scrollLogo.style.transform = 'translateY(0)';
+                        }
+                    } else {
+                        header.classList.remove('scrolled');
+                        // Скрываем логотип плавно
+                        if (scrollLogo) {
+                            scrollLogo.style.opacity = '0';
+                            scrollLogo.style.visibility = 'hidden';
+                            scrollLogo.style.transform = 'translateY(-10px)';
+                        }
+                    }
+                } else {
+                    header.classList.add('scrolled');
+                    // На других страницах всегда показываем логотип
+                    if (scrollLogo) {
+                        scrollLogo.style.opacity = '1';
+                        scrollLogo.style.visibility = 'visible';
+                        scrollLogo.style.transform = 'translateY(0)';
+                    }
+                }
+            }
+            
+            // Инициализируем логотип как скрытый
+            if (scrollLogo) {
+                scrollLogo.style.opacity = '0';
+                scrollLogo.style.visibility = 'hidden';
+                scrollLogo.style.transform = 'translateY(-10px)';
+                scrollLogo.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            }
+            
+            // 2. Инициализация слайдера
+            let currentSlide = 0;
+            if (slides.length > 0) {
+                slides[0].classList.add('active');
+                
+                setInterval(() => {
+                    slides[currentSlide].classList.remove('active');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.add('active');
+                }, 5000);
+            }
+            
+            // 3. Бургер-меню с overlay и изменением хедера
+            const burgerMenu = document.getElementById('burgerMenu');
+            const navMenu = document.getElementById('navMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            function openMenu() {
+                navMenu.classList.add('active');
+                burgerMenu.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.classList.add('menu-open');
+                
+                // На главной странице при открытии меню делаем хедер цветным
+                if (document.body.classList.contains('home')) {
+                    header.classList.add('scrolled');
+                    if (scrollLogo) {
+                        scrollLogo.style.opacity = '1';
+                        scrollLogo.style.visibility = 'visible';
+                        scrollLogo.style.transform = 'translateY(0)';
+                    }
+                }
+            }
+            
+            function closeMenu() {
+                navMenu.classList.remove('active');
+                burgerMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+            
+            if (burgerMenu && navMenu && menuOverlay) {
+                burgerMenu.addEventListener('click', () => {
+                    if (navMenu.classList.contains('active')) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+                
+                // Закрытие меню при клике на overlay
+                menuOverlay.addEventListener('click', () => {
+                    closeMenu();
+                });
+                
+                // Закрытие меню при клике на ссылку
+                document.querySelectorAll('.nav-menu a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        closeMenu();
+                    });
+                });
+                
+                // Закрытие меню при нажатии ESC
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                        closeMenu();
+                    }
+                });
+            }
+            
+            // 4. Кнопка "наверх"
+            const scrollTop = document.getElementById('scrollTop');
+            if (scrollTop) {
+                window.addEventListener('scroll', () => {
+                    updateHeader();
+                    
+                    if (window.pageYOffset > 300) {
+                        scrollTop.style.display = 'flex';
+                    } else {
+                        scrollTop.style.display = 'none';
+                    }
+                });
+                
+                scrollTop.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // 5. Обновление корзины
+            function updateCartCount() {
+                try {
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    const totalItems = cart.reduce((sum, item) => sum + (item.amount || 0), 0);
+                    
+                    document.querySelectorAll('#cartFloatCount, #cartCount').forEach(el => {
+                        if (el) el.textContent = Math.round(totalItems);
+                    });
+                } catch (e) {
+                    console.log('Ошибка обновления корзины:', e);
+                }
+            }
+            
+            // 6. Плавная прокрутка для якорных ссылок
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    if (href === '#' || href === '') return;
+                    
+                    e.preventDefault();
+                    
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        const headerHeight = header.offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // ИНИЦИАЛИЗАЦИЯ
+            updateCartCount();
+            updateHeader();
+            
+            // Слушаем событие скролла
+            window.addEventListener('scroll', updateHeader);
+        });
+    </script>
+</body>
+</html>

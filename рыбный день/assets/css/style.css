@@ -1,0 +1,1322 @@
+:root {
+    --primary-color: #7E4F35;
+    --secondary-color: #B59B76;
+    --accent-color: #592A0F;
+    --light-color: #f8f5f0;
+    --dark-color: #333;
+    --success-color: #28a745;
+    --transition: all 0.3s ease;
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+    --border-radius-lg: 20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Source Serif 4', serif;
+    color: var(--dark-color);
+    line-height: 1.6;
+    background-color: #fff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ------------------------------------------------------------------------ */
+/* ОБНОВЛЕННЫЕ СТИЛИ ХЕДЕРА */
+.header {
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    background-color: rgba(181, 155, 118, 0.95);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Убираем тень у хедера когда меню открыто */
+body.menu-open .header {
+    box-shadow: none;
+}
+
+/* ХЕДЕР НА ГЛАВНОЙ СТРАНИЦЕ - ИЗНАЧАЛЬНО ПРОЗРАЧНЫЙ */
+.home .header {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* ХЕДЕР ПРИ СКРОЛЛЕ НА ГЛАВНОЙ - СТАНОВИТСЯ ЦВЕТНЫМ */
+.home .header.scrolled {
+    background-color: rgba(181, 155, 118, 0.95);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Скрываем логотип в начале (только на главной) */
+.home .header:not(.scrolled) .nav-logo {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+}
+
+/* Показываем логотип при скролле */
+.home .header.scrolled .nav-logo {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Анимация для логотипа */
+.scroll-logo {
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+/* ЦВЕТ ТЕКСТА В ПРОЗРАЧНОМ ХЕДЕРЕ (ТОЛЬКО НА ГЛАВНОЙ) */
+.home .header:not(.scrolled) .nav-logo span,
+.home .header:not(.scrolled) .nav-menu a,
+.home .header:not(.scrolled) .nav-cart {
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.home .header:not(.scrolled) .burger-line {
+    background-color: white;
+}
+
+/* ЦВЕТ ТЕКСТА В ЦВЕТНОМ ХЕДЕРЕ (ВСЕГДА) */
+.header.scrolled .nav-logo span,
+.header.scrolled .nav-menu a,
+.header.scrolled .nav-cart,
+.header:not(.home) .nav-logo span,
+.header:not(.home) .nav-menu a,
+.header:not(.home) .nav-cart {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header.scrolled .burger-line,
+.header:not(.home) .burger-line {
+    background-color: white;
+}
+
+/* Дефолтные стили текста */
+.nav-logo span,
+.nav-menu a,
+.nav-cart {
+    color: var(--dark-color);
+}
+
+/* ------------------------------------------------------------------------ */
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1001;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    position: relative;
+    z-index: 1001;
+}
+
+.nav-logo img {
+    height: 50px;
+    width: auto;
+}
+
+.nav-logo span {
+    font-family: 'Source Serif 4', serif;
+    font-size: 24px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+.nav-menu a {
+    text-decoration: none;
+    font-family: 'Source Serif 4', serif;
+    font-size: 18px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: var(--transition);
+}
+
+.nav-menu a:hover {
+    background-color: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.nav-cart {
+    position: relative;
+    font-size: 24px;
+    color: inherit;
+    text-decoration: none;
+    z-index: 1001;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #592A0F;
+    color: white;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Бургер-меню для мобильных */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1001;
+    position: relative;
+}
+
+.burger-line {
+    width: 25px;
+    height: 3px;
+    background: white;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+/* Анимация бургер-меню */
+.burger-menu.active .burger-line:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.burger-menu.active .burger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.burger-menu.active .burger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Overlay для закрытия фона цветом меню */
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(181, 155, 118);
+    z-index: 997;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Адаптивность хедера */
+@media (max-width: 768px) {
+    /* Центрируем элементы в хедере для мобильной версии */
+    .nav-container {
+        justify-content: space-between;
+    }
+    
+    /* На мобильных всегда показываем логотип в хедере */
+    .home .header .nav-logo {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    /* Меню становится единым целым с хедером */
+    .nav-menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: transparent;
+        backdrop-filter: none;
+        flex-direction: column;
+        padding-top: 95px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 30px;
+        text-align: center;
+        gap: 15px;
+        z-index: 998;
+        overflow-y: auto;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        box-shadow: none;
+        pointer-events: none;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+        transform: translateX(0);
+        pointer-events: auto;
+    }
+    
+    .nav-menu li {
+        list-style: none;
+    }
+    
+    .nav-menu a {
+        display: block;
+        padding: 15px 20px;
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        pointer-events: auto;
+    }
+    
+    .nav-menu a:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
+    }
+    
+    /* Хедер должен быть поверх overlay и меню при открытом меню */
+    .header {
+        z-index: 1000;
+    }
+    
+    /* Исключаем область хедера из кликабельности меню */
+    .nav-menu::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 80px;
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    .burger-menu {
+        display: flex;
+    }
+    
+    /* Блокируем прокрутку при открытом меню */
+    body.menu-open {
+        overflow: hidden;
+    }
+    
+    .nav-logo span {
+        font-size: 18px;
+    }
+}
+
+/* СТИЛИ ДЛЯ ФОНОВОГО СЛАЙДЕРА */
+.hero {
+    position: relative;
+    overflow: hidden;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+}
+
+.hero-slideshow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.hero-slide.active {
+    opacity: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        rgba(126, 79, 53, 0.6), 
+        rgba(181, 155, 118, 0.6)
+    );
+    z-index: -1;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    padding: 40px 20px;
+}
+
+/* ДЕСКТОПНАЯ ВЕРСИЯ ГЕРОЯ */
+.hero-desktop {
+    display: block;
+}
+
+/* Контейнер 1: FISH DAY - НОВЫЙ ШРИФТ SF PRO ROUNDED */
+.hero-main-title {
+    margin-bottom: 40px;
+    animation: fadeInUp 1s ease;
+}
+
+/* ШРИФТ SF PRO ROUNDED для заголовка */
+.hero-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded', 'Segoe UI', Roboto, sans-serif;
+    font-size: 5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: white;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    line-height: 1;
+}
+
+/* УМЕНЬШЕН РАЗМЕР ШРИФТА ПОДЗАГОЛОВКА */
+.hero-subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.5rem;
+    color: var(--light-color);
+    font-style: italic;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+}
+
+/* Контейнер 2: 4 строки с рамками */
+.hero-features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 850px;
+    margin: 0 auto;
+    animation: fadeInUp 1s ease 0.3s both;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius-lg);
+    padding: 25px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    min-height: 90px;
+}
+
+.feature-item:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.feature-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background: linear-gradient(to bottom, var(--secondary-color), var(--primary-color));
+    border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
+}
+
+/* Текст в контейнерах */
+.feature-text {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    padding-right: 20px;
+    flex: 1;
+}
+
+/* ИКОНКИ ОДНОГО СТИЛЯ - КОРИЧНЕВЫЙ ФОН, БЕЛЫЕ ЭМОДЗИ */
+.feature-sticker {
+    background-color: var(--accent-color);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(89, 42, 15, 0.3);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Эффект внутреннего свечения */
+.feature-sticker::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.15) 0%, 
+        rgba(255, 255, 255, 0.05) 50%, 
+        transparent 100%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Эффект при наведении на карточку */
+.feature-item:hover .feature-sticker {
+    background-color: var(--primary-color);
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 16px rgba(89, 42, 15, 0.4);
+}
+
+/* Анимация появления иконок */
+.feature-sticker {
+    animation: iconAppear 0.5s ease-out 0.2s both;
+}
+
+@keyframes iconAppear {
+    0% {
+        transform: scale(0.5) rotate(-90deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+/* МОБИЛЬНАЯ ВЕРСИЯ ГЕРОЯ */
+.hero-mobile {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Контейнер: FISH DAY с подзаголовком - НОВЫЙ ШРИФТ */
+.mobile-main-title {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInUp 1s ease;
+}
+
+.mobile-fish-day {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded', 'Segoe UI', Roboto, sans-serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    line-height: 1;
+}
+
+.mobile-subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.3rem;
+    color: var(--light-color);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    line-height: 1.2;
+    letter-spacing: 0.3px;
+}
+
+/* Контейнер: 4 строки - СТИЛИЗОВАНЫ ДЛЯ МОБИЛЬНОЙ ВЕРСИИ */
+.mobile-features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.mobile-feature-item {
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-radius: var(--border-radius-lg);
+    padding: 20px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    min-height: 80px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-feature-item:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.mobile-feature-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background: linear-gradient(to bottom, var(--secondary-color), var(--primary-color));
+    border-radius: var(--border-radius-lg) 0 0 var(--border-radius-lg);
+}
+
+.mobile-feature-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.mobile-feature-text {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.15rem;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    padding-right: 15px;
+    flex: 1;
+    text-align: left;
+}
+
+/* ИКОНКИ ОДНОГО СТИЛЯ ДЛЯ МОБИЛЬНОЙ ВЕРСИИ */
+.mobile-feature-icon {
+    background-color: var(--accent-color);
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(89, 42, 15, 0.3);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Эффект внутреннего свечения для мобильных */
+.mobile-feature-icon::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.15) 0%, 
+        rgba(255, 255, 255, 0.05) 50%, 
+        transparent 100%);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Эффект при наведении на мобильной карточке */
+.mobile-feature-item:hover .mobile-feature-icon {
+    background-color: var(--primary-color);
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 16px rgba(89, 42, 15, 0.4);
+}
+
+/* Анимация появления иконок для мобильных */
+.mobile-feature-icon {
+    animation: iconAppear 0.5s ease-out 0.2s both;
+}
+
+.hero-scroll {
+    margin-top: 50px;
+    animation: fadeInUp 1s ease 0.6s both;
+}
+
+.scroll-down {
+    color: white;
+    font-size: 2rem;
+    display: inline-block;
+    animation: bounce 2s infinite;
+    text-decoration: none;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Кнопки быстрых действий */
+.quick-actions {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.quick-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    position: relative;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.quick-action:hover {
+    background-color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.cart-float-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 0.8rem;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.phone-float {
+    background-color: var(--success-color);
+}
+
+.scroll-top {
+    background-color: var(--dark-color);
+    display: none;
+}
+
+.products-section, .delivery-section, .how-we-work, .footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* Секция товаров */
+.products-section {
+    padding: 80px 0;
+}
+
+.bg-alt {
+    background-color: var(--light-color);
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    animation: fadeIn 0.5s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    height: 250px;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product-name {
+    font-size: 1.3rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.product-description {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+/* Кнопки */
+.btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: var(--transition);
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 15px rgba(89, 42, 15, 0.2);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Доставка */
+.delivery-section {
+    padding: 80px 0;
+    background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+    text-align: center;
+    color: white;
+}
+
+.delivery-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.delivery-logos img {
+    height: 80px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: var(--transition);
+}
+
+.delivery-logos img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Как мы работаем */
+.how-we-work {
+    padding: 80px 0;
+    background-color: white;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 50px;
+    font-size: 1.2rem;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.step {
+    text-align: center;
+    padding: 20px;
+    transition: var(--transition);
+}
+
+.step:hover {
+    transform: translateY(-5px);
+}
+
+.step-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+}
+
+.trust-banner {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    color: white;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.trust-banner i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.trust-banner h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.trust-banner p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Футер */
+.footer {
+    background-color: var(--dark-color);
+    color: white;
+    padding: 60px 0 20px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-section h4 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+}
+
+.footer-section p, .footer-section a {
+    color: #bbb;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.footer-section a {
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.footer-section a:hover {
+    color: white;
+    padding-left: 5px;
+}
+
+.footer-section i {
+    margin-right: 10px;
+    color: var(--secondary-color);
+    min-width: 20px;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #444;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.payment-methods {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.payment-methods img {
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* МЕДИА-ЗАПРОСЫ ДЛЯ АДАПТИВНОСТИ */
+@media (max-width: 1200px) {
+    .hero-title {
+        font-size: 4.2rem;
+    }
+    
+    .feature-text {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 3.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.4rem;
+    }
+    
+    .feature-text {
+        font-size: 1.2rem;
+    }
+    
+    .feature-item {
+        padding: 22px 30px;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Показываем мобильную версию, скрываем десктопную */
+    .hero-desktop {
+        display: none;
+    }
+    
+    .hero-mobile {
+        display: flex;
+    }
+    
+    .hero-content {
+        padding-top: 100px;
+    }
+    
+    .mobile-fish-day {
+        font-size: 2.8rem;
+    }
+    
+    .mobile-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .mobile-feature-text {
+        font-size: 1.05rem;
+    }
+    
+    .mobile-feature-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.2rem;
+    }
+    
+    .feature-sticker {
+        width: 45px;
+        height: 45px;
+        font-size: 1.4rem;
+    }
+    
+    .delivery-logos {
+        gap: 25px;
+        padding: 15px;
+    }
+    
+    .delivery-logos img {
+        height: 60px;
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 3.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .section-title {
+        font-size: 1.9rem;
+    }
+    
+    .mobile-fish-day {
+        font-size: 2.4rem;
+    }
+    
+    .mobile-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .mobile-feature-text {
+        font-size: 1rem;
+    }
+    
+    .mobile-feature-item {
+        padding: 18px 15px;
+        min-height: 75px;
+    }
+    
+    .mobile-feature-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+    }
+    
+    .feature-sticker {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+    
+    .delivery-logos {
+        gap: 20px;
+        padding: 10px;
+    }
+    
+    .delivery-logos img {
+        height: 50px;
+        max-width: 120px;
+    }
+}
+
+@media (max-width: 400px) {
+    .mobile-fish-day {
+        font-size: 2.1rem;
+    }
+    
+    .mobile-subtitle {
+        font-size: 1rem;
+    }
+    
+    .mobile-feature-text {
+        font-size: 0.95rem;
+    }
+    
+    .mobile-feature-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+    
+    .delivery-logos {
+        gap: 15px;
+        padding: 10px;
+    }
+    
+    .delivery-logos img {
+        height: 45px;
+        max-width: 100px;
+    }
+}
+
+/* ПОДКЛЮЧЕНИЕ SF PRO ROUNDED ЧЕРЕЗ FONT-FACE */
+@font-face {
+    font-family: 'SF Pro Rounded';
+    src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-regular.woff2') format('woff2'),
+         url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Rounded';
+    src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-medium.woff2') format('woff2'),
+         url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Rounded';
+    src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-semibold.woff2') format('woff2'),
+         url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-semibold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Rounded';
+    src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-bold.woff2') format('woff2'),
+         url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Rounded';
+    src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-heavy.woff2') format('woff2'),
+         url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-heavy.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SF Pro Rounded';
+    src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-black.woff2') format('woff2'),
+         url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sf-pro-rounded-black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* ПЕРЕОПРЕДЕЛЕНИЕ СТИЛЕЙ ДЛЯ SF PRO ROUNDED */
+.hero-title,
+.mobile-fish-day {
+    font-family: 'SF Pro Rounded', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 800;
+}

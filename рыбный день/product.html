@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товар - Рыбныйдень</title>
+    
+    <!-- Подключите те же стили, что и на главной -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/images/icon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Стили для страницы товара */
+        .product-page {
+            padding: 100px 20px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .breadcrumbs {
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .breadcrumbs a {
+            color: #7E4F35;
+            text-decoration: none;
+        }
+        
+        .product-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .product-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .product-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-info {
+            background: linear-gradient(135deg, #f8f5f0, #fff);
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #B59B76;
+        }
+        
+        .product-title {
+            color: #592A0F;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .product-price {
+            font-size: 32px;
+            color: #7E4F35;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .product-price-old {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        
+        .weight-selector {
+            margin: 30px 0;
+        }
+        
+        .weight-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #592A0F;
+        }
+        
+        .weight-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .weight-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #B59B76;
+            background: white;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .weight-btn:hover {
+            background: #B59B76;
+            color: white;
+        }
+        
+        .weight-input {
+            width: 100px;
+            height: 40px;
+            text-align: center;
+            border: 2px solid #B59B76;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .quick-weights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .quick-weight {
+            padding: 8px 15px;
+            border: 1px solid #B59B76;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quick-weight:hover {
+            background: #B59B76;
+            color: white;
+        }
+        
+        .product-total {
+            background: #592A0F;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .total-final {
+            font-size: 24px;
+            font-weight: bold;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn-add-cart {
+            flex: 1;
+            padding: 15px;
+            background: #7E4F35;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-add-cart:hover {
+            background: #592A0F;
+            transform: translateY(-2px);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #4ecdc4;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Хедер (такой же как на главной, но сразу цветной) -->
+    <header class="header" id="mainHeader">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/images/logotip.png" alt="Логотип" width="50" height="50">
+                <span>Рыбныйдень</span>
+            </a>
+            
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="index.html#fish">Рыба</a></li>
+                    <li><a href="index.html#snacks">Снеки</a></li>
+                    <li><a href="index.html#delivery">Доставка</a></li>
+                    <li><a href="index.html#contacts">Контакты</a></li>
+                </ul>
+            </nav>
+            
+            <div class="nav-right">
+                <a href="cart.html" class="nav-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <button class="burger-menu" id="burgerMenu">
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay для затемнения фона при открытии меню -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <main class="product-page">
+        <!-- Хлебные крошки -->
+        <div class="breadcrumbs">
+            <a href="index.html">Главная</a> / 
+            <a href="index.html#fish">Рыба</a> / 
+            <span id="breadcrumbCurrent">Товар</span>
+        </div>
+        
+        <div class="product-container">
+            <!-- Изображение товара -->
+            <div class="product-image">
+                <img id="productImage" src="" alt="Товар">
+            </div>
+            
+            <!-- Информация о товаре -->
+            <div class="product-info">
+                <h1 class="product-title" id="productTitle">Название товара</h1>
+                
+                <div class="product-price">
+                    <span id="productPrice">0</span>₽
+                    <span class="product-price-old" id="productOldPrice"></span>
+                </div>
+                
+                <p class="product-description" id="productDescription">Описание товара</p>
+                
+                <!-- Селектор веса/количества -->
+                <div class="weight-selector" id="weightSelector">
+                    <label class="weight-label" id="weightLabel">Выберите вес (кг):</label>
+                    <div class="weight-controls">
+                        <button class="weight-btn minus" id="weightMinus">-</button>
+                        <input type="text" class="weight-input" id="weightInput" value="1" readonly>
+                        <button class="weight-btn plus" id="weightPlus">+</button>
+                    </div>
+                    <div class="quick-weights" id="quickWeights">
+                        <!-- Быстрый выбор веса -->
+                    </div>
+                </div>
+                
+                <!-- Итоговая сумма -->
+                <div class="product-total">
+                    <div class="total-row">
+                        <span>Вы выбрали:</span>
+                        <span id="selectedAmount">1 кг</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Цена за кг/шт:</span>
+                        <span id="unitPrice">0 ₽</span>
+                    </div>
+                    <div class="total-row total-final">
+                        <span>Итого:</span>
+                        <span id="totalPrice">0 ₽</span>
+                    </div>
+                </div>
+                
+                <!-- Кнопки действий -->
+                <div class="product-actions">
+                    <button class="btn-add-cart" id="btnAddCart">
+                        <i class="fas fa-shopping-cart"></i> Добавить в корзину
+                    </button>
+                </div>
+                
+                <!-- Информация о доставке -->
+                <div style="margin-top: 20px; padding: 15px; background: #f0e6d2; border-radius: 5px;">
+                    <p><i class="fas fa-truck"></i> Бесплатная доставка при заказе от 5000₽</p>
+                    <p><i class="fas fa-weight-scale"></i> Финальный вес может незначительно отличаться</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Уведомление -->
+    <div class="notification" id="notification">Товар добавлен в корзину!</div>
+    
+    <!-- Скрипты -->
+    <script>
+        // На страницах товара и корзины хедер всегда цветной
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.getElementById('mainHeader');
+            if (header) {
+                header.classList.add('scrolled');
+            }
+        });
+
+        // Данные товаров (должны соответствовать id на главной)
+        const products = {
+            1: {
+                name: "Вобла вяленая",
+                price: 780,
+                image: "assets/images/voBlya.png",
+                description: "Вяленая вобла весеннего улова. Средний размер рыбки 22-25 см",
+                type: "weight",
+                unit: "кг"
+            },
+            2: {
+                name: "Чехонь вяленая",
+                price: 460,
+                image: "assets/images/chehoni.png",
+                description: "Вяленая чехонь славится своим жиром. При разделки все руки в нем!",
+                type: "weight",
+                unit: "кг"
+            },
+            3: {
+                name: "Камбала-ерш вяленая",
+                price: 460,
+                image: "assets/images/cambala.png",
+                description: "Камбала-ерш - вкусная рыба, богатая полезными веществами.",
+                type: "weight",
+                unit: "кг"
+            },
+            4: {
+                name: "Щука потрошенная вяленая",
+                price: 880,
+                image: "assets/images/chuka.png",
+                description: "Щука - изысканная деликатесная рыба с неповторимым ароматом.",
+                type: "weight",
+                unit: "кг"
+            },
+            5: {
+                name: "Карп потрошенный вяленый",
+                price: 650,
+                image: "assets/images/carp.png",
+                description: "Карп рыба с нежным мясом и сладковатым ароматным вкусом.",
+                type: "weight",
+                unit: "кг"
+            },
+            6: {
+                name: "Густера вяленая",
+                price: 310,
+                image: "assets/images/taran.png",
+                description: "Густера является традиционно русской закуской к пенному.",
+                type: "weight",
+                unit: "кг"
+            },
+            7: {
+                name: "Сыр 'ДЖИЛ' копченый",
+                price: 105,
+                image: "assets/images/капчени.png",
+                description: "Сыр 'ДЖИЛ' копченый - вкусный, натуральный, высокого качества.",
+                type: "piece",
+                unit: "шт"
+            },
+            8: {
+                name: "Сыр 'ДЖИЛ' балык-белый",
+                price: 110,
+                image: "assets/images/молочный.png",
+                description: "Сыр 'ДЖИЛ' молочный с особым ароматом и нежной текстурой.",
+                type: "piece",
+                unit: "шт"
+            },
+            9: {
+                name: "Сыр 'ДЖИЛ' балык-копченый",
+                price: 110,
+                image: "assets/images/другой капчении.png",
+                description: "Сыр 'ДЖИЛ' балык-копченый из натурального сырного сычужного фермента.",
+                type: "piece",
+                unit: "шт"
+            },
+            10: {
+                name: "Мясо кальмара со вкусом краба",
+                price: 650,
+                image: "assets/images/кальмар.png",
+                description: "Мясо кальмара имеет уникальный вкус, объединяющий свежесть морской пищи и аромат краба.",
+                type: "weight",
+                unit: "кг"
+            },
+            11: {
+                name: "Соломка из Судака",
+                price: 510,
+                image: "assets/images/судак.png",
+                description: "Соломка 'Судака' производится путем высушивания свежей рыбы.",
+                type: "weight",
+                unit: "кг"
+            },
+            12: {
+                name: "Соломка из Горбуши",
+                price: 550,
+                image: "assets/images/горбуша.png",
+                description: "Соломка из горбуши - деликатесное рыбное блюдо с неповторимым вкусом.",
+                type: "weight",
+                unit: "кг"
+            }
+        };
+        
+        // Получение параметров из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        const productType = urlParams.get('type');
+        
+        // DOM элементы
+        const productTitle = document.getElementById('productTitle');
+        const productPrice = document.getElementById('productPrice');
+        const productImage = document.getElementById('productImage');
+        const productDescription = document.getElementById('productDescription');
+        const weightLabel = document.getElementById('weightLabel');
+        const weightInput = document.getElementById('weightInput');
+        const weightMinus = document.getElementById('weightMinus');
+        const weightPlus = document.getElementById('weightPlus');
+        const quickWeights = document.getElementById('quickWeights');
+        const selectedAmount = document.getElementById('selectedAmount');
+        const unitPrice = document.getElementById('unitPrice');
+        const totalPrice = document.getElementById('totalPrice');
+        const btnAddCart = document.getElementById('btnAddCart');
+        const notification = document.getElementById('notification');
+        
+        // Загрузка товара
+        function loadProduct() {
+            if (products[productId]) {
+                const product = products[productId];
+                
+                // Заполнение данных
+                productTitle.textContent = product.name;
+                productPrice.textContent = product.price;
+                productImage.src = product.image;
+                productImage.alt = product.name;
+                productDescription.textContent = product.description;
+                
+                // Настройка селектора веса/количества
+                if (product.type === 'weight') {
+                    weightLabel.textContent = 'Выберите вес (кг):';
+                    weightInput.value = '1';
+                    
+                    // Быстрый выбор веса
+                    quickWeights.innerHTML = `
+                        <div class="quick-weight" data-weight="0.5">0.5 кг</div>
+                        <div class="quick-weight" data-weight="1">1 кг</div>
+                        <div class="quick-weight" data-weight="2">2 кг</div>
+                        <div class="quick-weight" data-weight="3">3 кг</div>
+                        <div class="quick-weight" data-weight="5">5 кг</div>
+                    `;
+                } else {
+                    weightLabel.textContent = 'Выберите количество (шт):';
+                    weightInput.value = '1';
+                    
+                    quickWeights.innerHTML = `
+                        <div class="quick-weight" data-weight="1">1 шт</div>
+                        <div class="quick-weight" data-weight="2">2 шт</div>
+                        <div class="quick-weight" data-weight="3">3 шт</div>
+                        <div class="quick-weight" data-weight="5">5 шт</div>
+                        <div class="quick-weight" data-weight="10">10 шт</div>
+                    `;
+                }
+                
+                // Обновление итоговой цены
+                updateTotalPrice();
+            }
+        }
+        
+        // Обновление итоговой цены
+        function updateTotalPrice() {
+            const product = products[productId];
+            const amount = parseFloat(weightInput.value);
+            const total = product.price * amount;
+            
+            selectedAmount.textContent = `${amount} ${product.unit}`;
+            unitPrice.textContent = `${product.price} ₽/${product.unit}`;
+            totalPrice.textContent = `${total.toFixed(0)} ₽`;
+        }
+        
+        // Обработчики событий
+        weightMinus.addEventListener('click', () => {
+            let value = parseFloat(weightInput.value);
+            const product = products[productId];
+            const min = product.type === 'weight' ? 0.1 : 1;
+            
+            if (value > min) {
+                value -= product.type === 'weight' ? 0.1 : 1;
+                weightInput.value = value.toFixed(1);
+                updateTotalPrice();
+            }
+        });
+        
+        weightPlus.addEventListener('click', () => {
+            let value = parseFloat(weightInput.value);
+            const product = products[productId];
+            const max = product.type === 'weight' ? 10 : 50;
+            
+            if (value < max) {
+                value += product.type === 'weight' ? 0.1 : 1;
+                weightInput.value = value.toFixed(1);
+                updateTotalPrice();
+            }
+        });
+        
+        // Быстрый выбор веса
+        quickWeights.addEventListener('click', (e) => {
+            if (e.target.classList.contains('quick-weight')) {
+                const weight = e.target.getAttribute('data-weight');
+                weightInput.value = weight;
+                updateTotalPrice();
+                
+                // Подсветка выбранного
+                document.querySelectorAll('.quick-weight').forEach(el => {
+                    el.style.background = 'white';
+                    el.style.color = '#592A0F';
+                });
+                e.target.style.background = '#B59B76';
+                e.target.style.color = 'white';
+            }
+        });
+        
+        // Добавление в корзину
+        btnAddCart.addEventListener('click', () => {
+            const product = products[productId];
+            const amount = parseFloat(weightInput.value);
+            const total = product.price * amount;
+            
+            // Получение текущей корзины
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            // Добавление товара
+            cart.push({
+                id: productId,
+                name: product.name,
+                price: product.price,
+                amount: amount,
+                total: total,
+                unit: product.unit,
+                image: product.image
+            });
+            
+            // Сохранение в localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Обновление счетчика корзины
+            updateCartCount();
+            
+            // Показать уведомление
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+            
+            // Анимация кнопки
+            btnAddCart.style.background = '#4ecdc4';
+            setTimeout(() => {
+                btnAddCart.style.background = '#7E4F35';
+            }, 300);
+        });
+        
+        // Обновление счетчика корзины
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.amount, 0);
+            document.getElementById('cartCount').textContent = Math.round(totalItems);
+        }
+        
+        // Бургер-меню с overlay
+        const burgerMenu = document.getElementById('burgerMenu');
+        const navMenu = document.getElementById('navMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        
+        function openMenu() {
+            navMenu.classList.add('active');
+            burgerMenu.classList.add('active');
+            menuOverlay.classList.add('active');
+            document.body.classList.add('menu-open');
+        }
+        
+        function closeMenu() {
+            navMenu.classList.remove('active');
+            burgerMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.classList.remove('menu-open');
+        }
+        
+        if (burgerMenu && navMenu && menuOverlay) {
+            burgerMenu.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
+            // Закрытие меню при клике на overlay
+            menuOverlay.addEventListener('click', () => {
+                closeMenu();
+            });
+            
+            // Закрытие меню при клике на ссылку
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    closeMenu();
+                });
+            });
+            
+            // Закрытие меню при нажатии ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+        }
+        
+        // Инициализация
+        loadProduct();
+        updateCartCount();
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('.header');
+            if (header) {
+                header.classList.add('scrolled');
+                console.log('Хедер на странице товара/корзины стал цветным');
+            }
+            
+            // Обновление счетчика корзины
+            function updateCartCount() {
+                try {
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    const totalItems = cart.reduce((sum, item) => sum + (item.amount || 0), 0);
+                    document.getElementById('cartCount').textContent = Math.round(totalItems);
+                } catch (e) {
+                    console.log('Ошибка обновления корзины:', e);
+                }
+            }
+            
+            updateCartCount();
+            
+        });
+    </script>
+</body>
+</html>
