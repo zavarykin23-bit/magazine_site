@@ -266,7 +266,8 @@
                     <label class="weight-label" id="weightLabel">Выберите вес (кг):</label>
                     <div class="weight-controls">
                         <button class="weight-btn minus" id="weightMinus">-</button>
-                        <input type="text" class="weight-input" id="weightInput" value="1" readonly>
+                        <!-- Убрали readonly, добавили inputmode для мобильных и паттерн -->
+                        <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]+" class="weight-input" id="weightInput" value="1">
                         <button class="weight-btn plus" id="weightPlus">+</button>
                     </div>
                     <div class="quick-weights" id="quickWeights">
@@ -486,10 +487,14 @@
         // Обновление итоговой цены
         function updateTotalPrice() {
             const product = products[productId];
-            const amount = parseFloat(weightInput.value);
+            let amount = parseFloat(weightInput.value);
+            if (isNaN(amount)) amount = 0;
             const total = product.price * amount;
-            
-            selectedAmount.textContent = `${amount} ${product.unit}`;
+
+            // Форматирование количества в зависимости от типа
+            const amountDisplay = product.type === 'weight' ? amount.toFixed(1) : String(Math.round(amount));
+
+            selectedAmount.textContent = `${amountDisplay} ${product.unit}`;
             unitPrice.textContent = `${product.price} ₽/${product.unit}`;
             totalPrice.textContent = `${total.toFixed(0)} ₽`;
         }
@@ -502,7 +507,11 @@
             
             if (value > min) {
                 value -= product.type === 'weight' ? 0.1 : 1;
-                weightInput.value = value.toFixed(1);
+                if (product.type === 'weight') {
+                    weightInput.value = value.toFixed(1);
+                } else {
+                    weightInput.value = String(Math.max(min, Math.round(value)));
+                }
                 updateTotalPrice();
             }
         });
@@ -514,7 +523,11 @@
             
             if (value < max) {
                 value += product.type === 'weight' ? 0.1 : 1;
-                weightInput.value = value.toFixed(1);
+                if (product.type === 'weight') {
+                    weightInput.value = value.toFixed(1);
+                } else {
+                    weightInput.value = String(Math.round(value));
+                }
                 updateTotalPrice();
             }
         });
@@ -523,7 +536,13 @@
         quickWeights.addEventListener('click', (e) => {
             if (e.target.classList.contains('quick-weight')) {
                 const weight = e.target.getAttribute('data-weight');
-                weightInput.value = weight;
+                const product = products[productId];
+                // Форматирование значения в зависимости от типа товара
+                if (product.type === 'weight') {
+                    weightInput.value = parseFloat(weight).toFixed(1);
+                } else {
+                    weightInput.value = String(Math.round(parseFloat(weight)));
+                }
                 updateTotalPrice();
                 
                 // Подсветка выбранного
@@ -535,11 +554,41 @@
                 e.target.style.color = 'white';
             }
         });
+
+        // Разрешаем ручной ввод в поле веса и поддерживаем корректное форматирование
+        weightInput.addEventListener('input', (e) => {
+            // Заменяем запятую на точку и убираем лишние символы
+            let v = e.target.value.replace(',', '.').replace(/[^0-9.]/g, '');
+            const parts = v.split('.');
+            if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+            e.target.value = v;
+            // Обновляем итог (при вводе может быть пусто или некорректно)
+            updateTotalPrice();
+        });
+
+        weightInput.addEventListener('blur', () => {
+            const product = products[productId];
+            let value = parseFloat(weightInput.value);
+            const min = product.type === 'weight' ? 0.1 : 1;
+            const max = product.type === 'weight' ? 10 : 50;
+            if (isNaN(value) || value < min) value = min;
+            if (value > max) value = max;
+            if (product.type === 'weight') weightInput.value = value.toFixed(1);
+            else weightInput.value = String(Math.round(value));
+            updateTotalPrice();
+        });
         
         // Добавление в корзину
         btnAddCart.addEventListener('click', () => {
             const product = products[productId];
-            const amount = parseFloat(weightInput.value);
+            let amount = parseFloat(weightInput.value);
+            const min = product.type === 'weight' ? 0.1 : 1;
+            const max = product.type === 'weight' ? 10 : 50;
+            if (isNaN(amount) || amount < min) amount = min;
+            if (amount > max) amount = max;
+            // Округление/форматирование
+            if (product.type === 'weight') amount = parseFloat(amount.toFixed(1));
+            else amount = Math.round(amount);
             const total = product.price * amount;
             
             // Получение текущей корзины
