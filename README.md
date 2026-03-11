@@ -1,6 +1,6 @@
-# 🎣 Рыбный День - Fish Day Shop
+# 🎣 Рыбный День
 
-**Полнофункциональный интернет-магазин для продажи рыбы и снеков**
+**Полнофункциональный интернет-магазин**
 
 ![Status](https://img.shields.io/badge/Status-COMPLETE-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.8+-blue)
@@ -13,9 +13,6 @@
 
 Для быстрого старта - смотрите:
 1. **[QUICK_START.md](./QUICK_START.md)** ⚡ - 5 минут для запуска
-2. **[COMPLETE_SETUP_GUIDE.md](./COMPLETE_SETUP_GUIDE.md)** 📋 - Полное руководство
-3. **[ARCHITECTURE_AND_INTEGRATION.md](./ARCHITECTURE_AND_INTEGRATION.md)** 🏗️ - Архитектура проекта
-4. **[FINAL_STATUS.md](./FINAL_STATUS.md)** ✅ - Статус всех функций
 
 ---
 
@@ -32,8 +29,6 @@ python manage.py runserver
 
 # 3. Открыть браузер на http://localhost:8000
 ```
-
-Готово! Сайт работает! 🎉
 
 ---
 
@@ -69,9 +64,6 @@ python manage.py runserver
 ```
 magazine_site/
 ├── 📄 QUICK_START.md                    ← Начните отсюда!
-├── 📄 COMPLETE_SETUP_GUIDE.md          ← Полное руководство
-├── 📄 ARCHITECTURE_AND_INTEGRATION.md  ← Как все работает
-├── 📄 FINAL_STATUS.md                  ← Статус функций
 │
 ├── 📂 рыбный день/                     ← Фронтенд (HTML/CSS/JS)
 │   ├── index.html                      ← Главная страница
@@ -99,7 +91,7 @@ magazine_site/
 - Django 4.2+
 - Windows/Mac/Linux
 
-## 📦 Установка зависимостей
+## Установка зависимостей
 
 ```powershell
 cd admin_panel
@@ -126,67 +118,7 @@ pip install -r requirements.txt
 - **Яндекс Почта** (smtp.yandex.ru) - рекомендуется
 - **Gmail** (smtp.gmail.com) - альтернатива
 
-Все письма отправляются на `fishday068@mail.ru`
-
-Подробнее: смотрите `COMPLETE_SETUP_GUIDE.md` раздел "Email"
-
----
-
-## 🐛 Исправления в проекте
-
-- ✅ Поле ввода веса теперь редактируемое (было readonly)
-- ✅ Плавающая точка при расчетах (使用 integer math)
-- ✅ Единый Django сервер для фронтенда и API (не нужны два сервера)
-- ✅ Правильное обслуживание статических файлов (CSS, JS, Images)
-
----
-
-## 🚀 Примеры использования
-
-### Добавить товар в каталог
-
-Отредактируйте файл `рыбный день/index.html`, найдите секцию товаров и добавьте:
-
-```html
-<div class="product">
-    <img src="assets/images/my-fish.png" alt="Моя рыба">
-    <h3>Моя рыба</h3>
-    <p>500 ₽/кг</p>
-</div>
-```
-
-### Проверить заказы
-
-```powershell
-cd admin_panel
-python manage.py shell
-```
-
-```python
-from requests_app.models import CustomerRequest
-for order in CustomerRequest.objects.all():
-    print(f"{order.name} - {order.phone} - {order.total}₽")
-```
-
-### Отправить тестовое письмо
-
-```python
-from requests_app.email_service import send_test_email
-send_test_email('your@email.com')
-```
-
----
-
-## 📊 Статистика заказов
-
-Все заказы автоматически сохраняются в БД:
-- 📝 Имя и контакты клиента
-- 📦 Список товаров с ценами
-- 💰 Общая сумма заказа
-- ⏰ Время создания заказа
-- 🌐 IP адрес клиента
-
-Просмотрите через Admin панель: `/admin/`
+Все письма отправляются на `example@mail.ru`
 
 ---
 
@@ -247,29 +179,8 @@ DATABASES = {
 
 ---
 
-## 📞 Контакты
-
-**Email:** fishday068@mail.ru
-
-**Проект:** Fish Day Shop (Рыбный день)
-
----
-
 ## 📄 Лицензия
 
 MIT License - свободное использование в личных и коммерческих целях.
 
 ---
-
-## 🙏 Спасибо за использование!
-
-**Проект полностью готов к работе!** 🎉
-
-Все функции реализованы и протестированы.
-Просто запустите `python manage.py runserver` и начните продавать! 🎣
-
----
-
-**Версия:** 1.0.0  
-**Дата:** March 2026  
-**Статус:** ✅ COMPLETE
