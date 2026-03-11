@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=1.0">
     <link rel="icon" href="assets/images/icon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +29,12 @@
                     <li><a href="#contacts">Контакты</a></li>
                 </ul>
             </nav>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Поиск товаров...">
+                <i class="fas fa-search search-icon"></i>
+                <div class="search-results" id="searchResults"></div>
+            </div>
             
             <div class="nav-right">
                 <a href="cart.html" class="nav-cart">
@@ -270,6 +276,7 @@
 
     <script src="assets/js/main.js"></script>
     <script src="assets/js/products.js"></script>
+    <script src="assets/js/search.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

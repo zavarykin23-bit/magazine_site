@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Товар - Рыбныйдень</title>
     
-    <!-- Подключите те же стили, что и на главной -->
-    <link rel="stylesheet" href="assets/css/style.css">
+
+    <link rel="stylesheet" href="assets/css/style.css?v=1.0">
     <link rel="icon" href="assets/images/icon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Стили для страницы товара */
         .product-page {
             padding: 100px 20px 50px;
             max-width: 1200px;
@@ -219,6 +218,12 @@
                 </ul>
             </nav>
             
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Поиск товаров...">
+                <i class="fas fa-search search-icon"></i>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            
             <div class="nav-right">
                 <a href="cart.html" class="nav-cart">
                     <i class="fas fa-shopping-cart"></i>
@@ -311,6 +316,8 @@
     <div class="notification" id="notification">Товар добавлен в корзину!</div>
     
     <!-- Скрипты -->
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/search.js"></script>
     <script>
         // На страницах товара и корзины хедер всегда цветной
         document.addEventListener('DOMContentLoaded', function() {
@@ -321,7 +328,7 @@
         });
 
         // Данные товаров (должны соответствовать id на главной)
-        const products = {
+        const productsByIdMap = {
             1: {
                 name: "Вобла вяленая",
                 price: 780,
@@ -443,8 +450,8 @@
         
         // Загрузка товара
         function loadProduct() {
-            if (products[productId]) {
-                const product = products[productId];
+            if (productsByIdMap[productId]) {
+                const product = productsByIdMap[productId];
                 
                 // Заполнение данных
                 productTitle.textContent = product.name;
@@ -486,7 +493,7 @@
         
         // Обновление итоговой цены
         function updateTotalPrice() {
-            const product = products[productId];
+            const product = productsByIdMap[productId];
             let amount = parseFloat(weightInput.value);
             if (isNaN(amount)) amount = 0;
             const total = product.price * amount;
@@ -502,7 +509,7 @@
         // Обработчики событий
         weightMinus.addEventListener('click', () => {
             let value = parseFloat(weightInput.value);
-            const product = products[productId];
+            const product = productsByIdMap[productId];
             const min = product.type === 'weight' ? 0.1 : 1;
             
             if (value > min) {
@@ -518,7 +525,7 @@
         
         weightPlus.addEventListener('click', () => {
             let value = parseFloat(weightInput.value);
-            const product = products[productId];
+            const product = productsByIdMap[productId];
             const max = product.type === 'weight' ? 10 : 50;
             
             if (value < max) {
@@ -536,7 +543,7 @@
         quickWeights.addEventListener('click', (e) => {
             if (e.target.classList.contains('quick-weight')) {
                 const weight = e.target.getAttribute('data-weight');
-                const product = products[productId];
+                const product = productsByIdMap[productId];
                 // Форматирование значения в зависимости от типа товара
                 if (product.type === 'weight') {
                     weightInput.value = parseFloat(weight).toFixed(1);
@@ -567,7 +574,7 @@
         });
 
         weightInput.addEventListener('blur', () => {
-            const product = products[productId];
+            const product = productsByIdMap[productId];
             let value = parseFloat(weightInput.value);
             const min = product.type === 'weight' ? 0.1 : 1;
             const max = product.type === 'weight' ? 10 : 50;
@@ -580,7 +587,7 @@
         
         // Добавление в корзину
         btnAddCart.addEventListener('click', () => {
-            const product = products[productId];
+            const product = productsByIdMap[productId];
             let amount = parseFloat(weightInput.value);
             const min = product.type === 'weight' ? 0.1 : 1;
             const max = product.type === 'weight' ? 10 : 50;

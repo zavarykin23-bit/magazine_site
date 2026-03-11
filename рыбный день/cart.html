@@ -6,7 +6,7 @@
     <title>Корзина - Рыбныйдень</title>
     
     <!-- Подключите те же стили -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=1.0">
     <link rel="icon" href="assets/images/icon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -289,6 +289,12 @@
                 </ul>
             </nav>
             
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Поиск товаров...">
+                <i class="fas fa-search search-icon"></i>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            
             <div class="nav-right">
                 <a href="cart.html" class="nav-cart">
                     <i class="fas fa-shopping-cart"></i>
@@ -369,33 +375,36 @@
             <button class="close-btn" id="closeModal">&times;</button>
             <h3 class="modal-title">Оформление заказа</h3>
             
-            <form id="orderForm">
+            <form id="orderForm" data-form-type="order">
                 <div class="form-group">
                     <label>Ваше имя *</label>
-                    <input type="text" id="clientName" required>
+                    <input type="text" id="clientName" name="name" required>
                 </div>
                 
                 <div class="form-group">
                     <label>Телефон *</label>
-                    <input type="tel" id="clientPhone" required>
+                    <input type="tel" id="clientPhone" name="phone" required>
                 </div>
                 
                 <div class="form-group">
                     <label>Email (для уведомлений)</label>
-                    <input type="email" id="clientEmail">
+                    <input type="email" id="clientEmail" name="email">
                 </div>
                 
                 <div class="form-group">
                     <label>Адрес доставки (если нужна)</label>
-                    <textarea id="clientAddress" rows="3"></textarea>
+                    <textarea id="clientAddress" name="address" rows="3"></textarea>
                 </div>
                 
                 <div class="form-group">
                     <label>Комментарий к заказу</label>
-                    <textarea id="clientComment" rows="3" placeholder="Особые пожелания..."></textarea>
+                    <textarea id="clientComment" name="comment" rows="3" placeholder="Особые пожелания..."></textarea>
                 </div>
                 
-                <input type="hidden" id="orderDetails">
+                <!-- Honeypot field for spam protection -->
+                <input type="hidden" name="honeypot" value="">
+                
+                <input type="hidden" id="orderDetails" name="order_details">
                 
                 <button type="submit" class="submit-btn">
                     <i class="fas fa-paper-plane"></i> Отправить заказ
@@ -405,6 +414,8 @@
     </div>
     
     <!-- Скрипты -->
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/search.js"></script>
     <script>
         // На страницах товара и корзины хедер всегда цветной
         document.addEventListener('DOMContentLoaded', function() {
@@ -448,6 +459,9 @@
             
             // Добавление товаров
             cart.forEach((item, index) => {
+                // Безопасное приведение amount к числу
+                const rawAmount = parseFloat(item.amount);
+                const safeAmount = isNaN(rawAmount) ? (item.unit === 'кг' ? 0.1 : 1) : rawAmount;
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cart-item';
                 itemElement.innerHTML = `
@@ -457,7 +471,8 @@
                         <div class="cart-item-price">${item.price} ₽/${item.unit}</div>
                         <div class="cart-item-actions">
                             <button class="quantity-btn minus" data-index="${index}">-</button>
-                            <input type="text" class="quantity-input" value="${item.amount}" data-index="${index}" readonly>
+
+                            <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]+" class="quantity-input" value="${item.unit === 'кг' ? safeAmount.toFixed(1) : Math.round(safeAmount)}" data-index="${index}" data-unit="${item.unit}">
                             <button class="quantity-btn plus" data-index="${index}">+</button>
                             <button class="remove-btn" data-index="${index}">
                                 <i class="fas fa-trash"></i>
@@ -511,6 +526,62 @@
                 });
             });
             
+            // Ручной ввод количества/веса
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                // Санация ввода в реальном времени
+                input.addEventListener('input', (e) => {
+                    let v = e.target.value.replace(',', '.').replace(/[^0-9.]/g, '');
+                    const parts = v.split('.');
+                    if (parts.length > 2) v = parts[0] + '.' + parts.slice(1).join('');
+                    e.target.value = v;
+
+                    // Обновляем временно значения в корзине (не применяем валидацию min/max до blur)
+                    const idx = parseInt(e.target.getAttribute('data-index'));
+                    const unit = e.target.getAttribute('data-unit');
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    if (cart[idx]) {
+                        const amount = parseFloat(v);
+                        cart[idx].amount = isNaN(amount) ? 0 : amount;
+                        cart[idx].total = cart[idx].price * (isNaN(amount) ? 0 : amount);
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        // Обновляем отображение для данного элемента и итоги
+                        const itemEl = e.target.closest('.cart-item');
+                        if (itemEl) {
+                            const totalEl = itemEl.querySelector('.cart-item-total');
+                            totalEl.textContent = `${cart[idx].total.toFixed(0)} ₽`;
+                        }
+                        // Обновляем итоги
+                        const subtotal = cart.reduce((s, it) => s + (it.total || 0), 0);
+                        const shipping = subtotal >= 5000 ? 0 : 300;
+                        updateCartTotal(subtotal, shipping);
+                    }
+                });
+
+                // Валидация и финализация при уходе фокуса
+                input.addEventListener('blur', (e) => {
+                    const idx = parseInt(e.target.getAttribute('data-index'));
+                    const unit = e.target.getAttribute('data-unit');
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    if (!cart[idx]) return;
+
+                    let value = parseFloat(e.target.value);
+                    const min = unit === 'кг' ? 0.1 : 1;
+                    const max = unit === 'кг' ? 10 : 50;
+                    if (isNaN(value) || value < min) value = min;
+                    if (value > max) value = max;
+                    if (unit === 'кг') value = parseFloat(value.toFixed(1));
+                    else value = Math.round(value);
+
+                    cart[idx].amount = value;
+                    cart[idx].total = cart[idx].price * value;
+                    localStorage.setItem('cart', JSON.stringify(cart));
+
+                    // Обновляем UI и итоги
+                    e.target.value = unit === 'кг' ? value.toFixed(1) : String(value);
+                    loadCart();
+                });
+            });
+            
             // Кнопки удаления
             document.querySelectorAll('.remove-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -525,14 +596,22 @@
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             
             if (cart[index]) {
-                if (isPlus) {
-                    cart[index].amount += cart[index].unit === 'кг' ? 0.1 : 1;
+                if (cart[index].unit === 'кг') {
+                    let tenths = Math.round(cart[index].amount * 10);
+                    tenths = isPlus ? tenths + 1 : tenths - 1;
+                    const minTenths = 1; 
+                    const maxTenths = 100; 
+                    if (tenths < minTenths) tenths = minTenths;
+                    if (tenths > maxTenths) tenths = maxTenths;
+                    cart[index].amount = tenths / 10;
                 } else {
-                    if (cart[index].amount > (cart[index].unit === 'кг' ? 0.1 : 1)) {
-                        cart[index].amount -= cart[index].unit === 'кг' ? 0.1 : 1;
-                    }
+                    let pieces = Math.round(cart[index].amount);
+                    pieces = isPlus ? pieces + 1 : pieces - 1;
+                    if (pieces < 1) pieces = 1;
+                    if (pieces > 50) pieces = 50;
+                    cart[index].amount = pieces;
                 }
-                
+
                 cart[index].total = cart[index].price * cart[index].amount;
                 localStorage.setItem('cart', JSON.stringify(cart));
                 loadCart();
@@ -578,43 +657,79 @@
         
         // Отправка формы заказа
         orderForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = new FormData();
-        formData.append('name', document.getElementById('clientName').value);
-        formData.append('phone', document.getElementById('clientPhone').value);
-        formData.append('email', document.getElementById('clientEmail').value);
-        formData.append('address', document.getElementById('clientAddress').value);
-        formData.append('comment', document.getElementById('clientComment').value);
-        formData.append('order', document.getElementById('orderDetails').value);
-        
-        try {
-            const response = await fetch('send_order.php', {
-                method: 'POST',
-                body: formData
+            e.preventDefault();
+            
+            // Получаем кнопку отправки
+            const submitBtn = orderForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Отключаем кнопку и показываем статус загрузки
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+            
+            // Получаем корзину
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            // Подготавливаем детали заказа для передачи на сервер
+            let orderDetails = 'Товары в заказе:\n\n';
+            let totalPrice = 0;
+            cart.forEach(item => {
+                const itemTotal = parseFloat(item.total) || (item.price * item.amount);
+                orderDetails += `${item.name}: ${item.amount} ${item.unit} × ${item.price} ₽ = ${itemTotal.toFixed(0)} ₽\n`;
+                totalPrice += itemTotal;
             });
+            orderDetails += `\nИтого: ${totalPrice.toFixed(0)} ₽`;
             
-            const result = await response.json();
+            // Собираем данные формы с товарами из корзины
+            const formData = {
+                name: document.getElementById('clientName').value,
+                phone: document.getElementById('clientPhone').value,
+                email: document.getElementById('clientEmail').value,
+                address: document.getElementById('clientAddress').value,
+                comment: document.getElementById('clientComment').value,
+                order_details: orderDetails,  // Детали заказа для письма
+                total: totalPrice.toFixed(0),  // Общая сумма
+                cart: cart,  // Весь массив товаров (ключ "cart")
+                honeypot: ''
+            };
             
-            if (result.success) {
-                // Очистка корзины
-                localStorage.removeItem('cart');
+            try {
+                const response = await fetch('http://localhost:8000/api/submit-request/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
                 
-                // Закрытие модального окна
-                orderModal.style.display = 'none';
+                const result = await response.json();
                 
-                // Показать сообщение об успехе
-                alert('Заказ успешно оформлен! Менеджер свяжется с вами в ближайшее время.');
-                
-                // Обновление страницы
-                loadCart();
-            } else {
-                alert('Ошибка отправки заказа: ' + result.message);
+                if (response.ok && result.status === 'success') {
+                    // Показать сообщение об успехе ПЕРЕД очисткой корзины
+                    alert('✅ Заказ успешно оформлен! Менеджер свяжется с вами в ближайшее время.');
+                    
+                    // ТЕПЕРЬ очищаем корзину (после успешной отправки)
+                    localStorage.removeItem('cart');
+                    
+                    // Закрытие модального окна
+                    orderModal.style.display = 'none';
+                    
+                    // Очистка формы
+                    orderForm.reset();
+                    
+                    // Обновление страницы
+                    loadCart();
+                } else {
+                    alert('❌ Ошибка отправки заказа: ' + (result.message || 'Неизвестная ошибка'));
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('❌ Произошла ошибка при отправке заказа. Пожалуйста, позвоните нам.');
+            } finally {
+                // Восстанавливаем кнопку
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
             }
-        } catch (error) {
-            console.error('Ошибка:', error);
-            alert('Произошла ошибка при отправке заказа. Пожалуйста, позвоните нам.');
-        }
         });
         
         // Бургер-меню с overlay

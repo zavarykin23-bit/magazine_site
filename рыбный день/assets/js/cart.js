@@ -106,45 +106,59 @@ orderModal.addEventListener('click', (e) => {
 orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Сбор данных формы
+    // Сбор данных формы (совместимо с Django API)
     const formData = {
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value || 'Не указан',
-        address: document.getElementById('address').value || 'Не указан',
-        comment: document.getElementById('comment').value || 'Нет комментария',
-        cart: cart,
-        total: totalElement.textContent,
-        date: new Date().toLocaleString('ru-RU')
+        email: document.getElementById('email').value || '',
+        address: document.getElementById('address').value || '',
+        comment: document.getElementById('comment').value || '',
+        cart: cart,  // Передаём весь массив товаров из корзины (ключ "cart")
+        total: totalElement.textContent,  // "1234.56₽"
+        request_type: 'order'
     };
     
-    // В реальном проекте здесь будет отправка на сервер
-    // Для примера имитируем отправку
+    // Валидация
+    if (!formData.name.trim()) {
+        alert('Пожалуйста, введите ваше имя');
+        return;
+    }
+    if (!formData.phone.trim()) {
+        alert('Пожалуйста, введите ваш телефон');
+        return;
+    }
     
     try {
-        // Здесь должен быть реальный код отправки на email через сервер
-        // Например, через Formspree, EmailJS или собственный бэкенд
+        // Отправляем заказ на Django API
+        const response = await fetch('http://localhost:8000/api/submit-request/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
         
-        // Временно сохраняем заказ в localStorage для демонстрации
-        const orders = JSON.parse(localStorage.getItem('orders')) || [];
-        orders.push(formData);
-        localStorage.setItem('orders', JSON.stringify(orders));
+        const result = await response.json();
         
-        // Очищаем корзину
-        cart = [];
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        displayCartItems();
-        
-        // Закрываем модальное окно
-        orderModal.style.display = 'none';
-        
-        // Показываем сообщение об успехе
-        showSuccessMessage();
-        
+        if (result.status === 'success') {
+            // Очищаем корзину
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            displayCartItems();
+            
+            // Закрываем модальное окно
+            orderModal.style.display = 'none';
+            
+            // Показываем сообщение об успехе
+            alert('✅ ' + result.message);
+            showSuccessMessage();
+        } else {
+            alert('❌ Ошибка: ' + result.message);
+        }
     } catch (error) {
         console.error('Ошибка при отправке заказа:', error);
-        alert('Произошла ошибка при отправке заказа. Пожалуйста, попробуйте еще раз или позвоните нам.');
+        alert('❌ Ошибка при отправке заказа. Проверьте соединение и попробуйте еще раз.');
     }
 });
 
